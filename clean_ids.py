@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 
+"""
+clean_ids.py - Filters valid YouTube IDs from stdin.
+Logs invalid IDs to pipeline_autid.log with timestamps.
+"""
+
 import sys
 import re
 import logging
