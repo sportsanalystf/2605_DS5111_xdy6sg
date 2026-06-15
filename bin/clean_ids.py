@@ -14,12 +14,11 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 
-VALID_ID_PATTERN = re.compile(r'^[A-Za-z0-9_-]{11}$')
-
 
 def is_valid_youtube_id(candidate):
     """Return True if candidate is a valid 11-char YouTube ID."""
-    return bool(VALID_ID_PATTERN.match(candidate))
+    valid_id_pattern = re.compile(r'^[A-Za-z0-9_-]{11}$')
+    return bool(valid_id_pattern.match(candidate))
 
 
 def main():
