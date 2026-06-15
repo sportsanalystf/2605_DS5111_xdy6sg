@@ -1,2 +1,5 @@
-env/
+__pycache__/
+*.pyc
+.env
 pipeline_autid.log
+pipeline/logs/
