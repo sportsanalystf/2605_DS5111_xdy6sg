@@ -1,5 +1,6 @@
 pandas
 numpy
+google-genai
 pylint
 pytest
 python-dotenv
