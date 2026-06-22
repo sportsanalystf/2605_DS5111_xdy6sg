@@ -1,3 +1,7 @@
 pandas
 numpy
 google-genai
+pylint
+pytest
+python-dotenv
+youtube-transcript-api
