@@ -5,7 +5,6 @@ Tests for bin/extract_transcripts.py
 import sys
 import io
 import json
-import pytest
 from youtube_transcript_api import YouTubeTranscriptApi
 
 from bin.extract_transcripts import main

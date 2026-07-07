@@ -6,8 +6,8 @@ import sys
 import io
 import json
 import pytest
+from google.genai.models import Models
 from bin.enrich_transcripts import main
-
 
 class MockGeminiResponse:
     """Mimics the Gemini SDK response object's .text attribute."""
@@ -32,7 +32,6 @@ def test_enrich_transcripts_streaming_pipeline(monkeypatch, capsys):
 
     monkeypatch.setenv("GEMINI_API_KEY", "fake_test_key")
 
-    from google.genai.models import Models
     monkeypatch.setattr(Models, "generate_content", mock_generate_content)
 
     mock_input_row = {

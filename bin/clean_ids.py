@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-
+"""
+clean_ids.py - Filters valid YouTube IDs from stdin.
+Logs invalid IDs to pipeline_autid.log with timestamps.
+"""
 import sys
 import re
 import logging
@@ -10,12 +13,14 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 
-VALID_ID_PATTERN = re.compile(r'^[A-Za-z0-9_-]{11}$')
 
 def is_valid_youtube_id(candidate):
-    return bool(VALID_ID_PATTERN.match(candidate))
+    """Return True if candidate is a valid 11-char YouTube ID."""
+    valid_id_pattern = re.compile(r'^[A-Za-z0-9_-]{11}$')
+    return bool(valid_id_pattern.match(candidate))
 
 def main():
+    """Read YouTube IDs from stdin, print valid ones, log invalid ones."""
     try:
         for line in sys.stdin:
             candidate = line.strip()
@@ -24,7 +29,7 @@ def main():
             if is_valid_youtube_id(candidate):
                 print(candidate, flush=True)
             else:
-                logging.warning(f"Invalid YouTube ID: '{candidate}'")
+                logging.warning("Invalid YouTube ID: '%s'", candidate)
     except KeyboardInterrupt:
         sys.stderr.write('\n')
         sys.exit(0)
