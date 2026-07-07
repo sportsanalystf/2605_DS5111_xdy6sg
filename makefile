@@ -1,17 +1,25 @@
+ENV = env
+PYTHON = $(ENV)/bin/python3
+PIP = $(ENV)/bin/pip
+
+
 default:
 	@cat makefile
 
 env:
-	python3 -m venv env; . env/bin/activate; pip install --upgrade pip
+	python3 -m venv $(ENV); $(PIP) install --upgrade pip
 
-update: env
-	. env/bin/activate; pip install -r requirements.txt
+update:
+	$(PIP) install -r requirements.txt
 
 lint:
-	. env/bin/activate && pylint bin/
+	$(PYTHON) -m  pylint bin/ tests/
 
-test: lint
-	. env/bin/activate && pytest -vv tests/
+test:
+	$(PYTHON) -m pytest -vv tests/
+
+run:
+	@echo "Usage: cat <video_ids_file> | $(PYTHON) bin/extract_transcripts.py | $(PYTHON) bin/enrich_transcripts.py"
 
 test_enrich:
-	@. env/bin/activate && cat mock_transcripts.jsonl | python -u bin/enrich_transcripts.py | python bin/validate_schema.py
+	@cat mock_transcripts.jsonl | $(PYTHON) -u bin/enrich_transcripts.py | $(PYTHON) bin/validate_schema.py

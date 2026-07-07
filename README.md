@@ -1,71 +1,77 @@
 # 2605_DS5111_xdy6sg
 
-Setup automation for a DS5111 development VM. These scripts take a fresh
-Ubuntu VM to a working Python environment backed by GitHub, so the machine
-can be recreated quickly if the cloud instance is lost.
+## Project Overview
+A production-grade YouTube transcript data pipeline built for DS5111 Data Engineering at UVA. The pipeline extracts raw transcripts from YouTube videos, enriches them using the Google Gemini LLM, and validates the structured output against a strict JSON schema contract. All steps are designed as Unix-style stream processors (stdin → stdout) that can be chained together.
 
-## Starting point (assumptions)
+## Pipeline Architecture
+cat video_ids.txt
+  | python bin/extract_transcripts.py   # Fetches raw transcripts → JSONL
+  | python bin/enrich_transcripts.py    # Enriches via Gemini → structured JSONL
+  | python bin/validate_schema.py       # Validates output contract
 
-This guide assumes the AWS VM already exists. Before running anything below,
-you should have:
+## Repository Structure
+bin/                       # Executable pipeline scripts
+  clean_ids.py             # Validates YouTube ID format from stdin
+  extract_transcripts.py   # Fetches raw transcripts via YouTube Transcript API
+  enrich_transcripts.py    # Enriches transcripts via Google Gemini LLM
+  validate_schema.py       # Validates JSONL output against schema contract
+tests/                     # Pytest test suite
+  test_extract_transcripts.py
+  test_enrich_transcripts.py
+  test_environment.py
+mock_transcripts.jsonl     # Sample input for local pipeline testing
+requirements.txt           # Python dependencies
+makefile                   # Automation targets
+.github/workflows/         # GitHub Actions CI configuration
 
-- A running Ubuntu Server 26.04 VM that you can SSH into.
-- An SSH key on the VM registered with your GitHub account.
+## Environment Configuration
 
-Verify the GitHub connection with:
+| Variable | Required | Description |
+|----------|----------|-------------|
+| GEMINI_API_KEY | Yes | Google Gemini API key for LLM enrichment |
+| WEBSHARE_USER | No | Webshare proxy username (required on AWS EC2) |
+| WEBSHARE_PASSWORD | No | Webshare proxy password (required on AWS EC2) |
 
-    ssh -T git@github.com
+Store all credentials in a .env file at the repo root.
+This file is gitignored and must never be committed.
 
-You should see: `Hi <username>! You've successfully authenticated...`
+Example .env contents:
+GEMINI_API_KEY=your_key_here
+WEBSHARE_USER=your_proxy_user
+WEBSHARE_PASSWORD=your_proxy_password
 
-## Setup steps
+## Bootstrapping Instructions
 
-1. **Clone this repository**
+Step 1 - Clone the repository
+git clone git@github.com:sportsanalystf/2605_DS5111_xdy6sg.git
+cd 2605_DS5111_xdy6sg
 
-       git clone git@github.com:sportsanalystf/2605_DS5111_xdy6sg.git
-       cd 2605_DS5111_xdy6sg
+Step 2 - Create the virtual environment
+make env
 
-2. **Provision the VM**
+Step 3 - Install dependencies
+make update
 
-   Installs `make`, Python virtual environment support, and `tree`.
+Step 4 - Configure credentials
+nano .env
+Add GEMINI_API_KEY, WEBSHARE_USER, WEBSHARE_PASSWORD
 
-       bash scripts/init.sh
+Step 5 - Create required runtime directories
+mkdir -p logs
 
-   Quick test: run `tree`. If it lists files instead of returning
-   "command not found", the install worked.
+## Verification Steps
 
-3. **Configure git credentials**
+Run linter:
+make lint
+Expected: Your code has been rated at 10.00/10
 
-   Sets the global git user so commits are tagged with your name and email.
+Run tests:
+make test
+Expected: 15 passed, 1 skipped, 1 xfailed
 
-       bash scripts/init_git_creds.sh
+Run end-to-end pipeline smoke test:
+make test_enrich
+Expected: All 1 records match the required data contract!
 
-   Quick test: the script echoes `user.email` and `user.name` to the
-   console after running.
-
-   Note: a new user should edit `scripts/init_git_creds.sh` and replace
-   the `USER` and `NAME` values with their own GitHub email and username
-   before running it.
-
-4. **Build the Python virtual environment**
-
-   Creates the `env/` virtual environment and installs the packages
-   listed in `requirements.txt`.
-
-       make update
-
-   Quick test:
-
-       . env/bin/activate
-       pip list
-
-   The prompt should now show `(env)` on the left, and `pip list`
-   should include `pandas` and `numpy`.
-
-## Repository contents
-
-- `scripts/init.sh` — installs base system packages (make, venv, tree)
-- `scripts/init_git_creds.sh` — sets git global user configuration
-- `makefile` — builds the Python virtual environment
-- `requirements.txt` — Python package list
-- `.gitignore` — excludes the generated `env/` directory from git
+Run full pipeline:
+cat video_ids.txt | python bin/extract_transcripts.py | python bin/enrich_transcripts.py
