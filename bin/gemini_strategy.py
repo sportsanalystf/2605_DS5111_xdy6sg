@@ -5,7 +5,7 @@ Gemini SDK. Handles Gemini-specific auth, schema format, and invocation.
 """
 import os
 from google import genai
-from llm_strategy import LLMStrategy
+from bin.llm_strategy import LLMStrategy
 
 
 class GeminiStrategy(LLMStrategy):

@@ -8,7 +8,7 @@ isolation; knows nothing about Gemini, OpenAI, or any specific provider.
 import sys
 import json
 import logging
-from llm_strategy import LLMStrategy
+from bin.llm_strategy import LLMStrategy
 
 
 class TranscriptEnricher:
