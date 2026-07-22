@@ -1,0 +1,2 @@
+{"video_id": "ds5111_v001", "cleaned_text": "Welcome to class. Today we are testing mock frameworks and discussing the book Clean Code.", "tech_terms": ["mock frameworks", "data pipeline"], "book_names": ["Clean Code"]}
+{"video_id": "ds5111_v002", "cleaned_text": "In this lecture we cover Snowflake architecture and the VARIANT data type for semi-structured data.", "tech_terms": ["Snowflake", "VARIANT", "semi-structured data"], "book_names": []}
