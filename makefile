@@ -15,3 +15,12 @@ test: lint
 
 test_enrich:
 	@. env/bin/activate && cat mock_transcripts.jsonl | python -u bin/enrich_transcripts.py | python bin/validate_schema.py
+
+build:
+	docker build -t khansaamaa/ds5111-pipeline:latest .
+
+push:
+	docker push khansaamaa/ds5111-pipeline:latest
+
+run:
+	cat data/youtube_ids.txt | docker run -i --env-file .env khansaamaa/ds5111-pipeline:latest
