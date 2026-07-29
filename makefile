@@ -24,3 +24,7 @@ push:
 
 run:
 	cat data/youtube_ids.txt | docker run -i --env-file .env khansaamaa/ds5111-pipeline:latest
+
+load:
+	@echo "Initiating Cloud Data Warehouse Synchronizer Node..."
+	@cat data/enriched_transcripts.jsonl | $(PYTHON) bin/load_snowflake.py
