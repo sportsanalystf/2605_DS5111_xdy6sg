@@ -6,4 +6,4 @@ SELECT
     JSON_PAYLOAD:tech_terms AS tech_terms_array,
     JSON_PAYLOAD:book_names AS book_names_array,
     INSERTED_AT
-FROM XDY6SG.RAW_TRANSCRIPTS
+FROM DS5111_DB.PUBLIC.RAW_TRANSCRIPTS
